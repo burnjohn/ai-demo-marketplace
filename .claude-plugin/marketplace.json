@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "ai-demo-marketplace",
+  "owner": {
+    "name": "burnjohn",
+    "url": "https://github.com/burnjohn"
+  },
+  "metadata": {
+    "description": "AI Demo Marketplace — a Claude Code plugin catalog for the AI Agentic Engineering workshop (skills, agents, hooks, MCP servers)."
+  },
+  "plugins": []
+}

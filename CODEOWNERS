@@ -1,0 +1,8 @@
+# Default owners for the whole catalog.
+# Responsible for reviewing PRs and approving new plugins into the marketplace.
+* @burnjohn
+
+# Per-plugin owners are added when each plugin is added.
+# Ownership = responsibility for review and maintenance, not exclusivity.
+# Example:
+# /plugins/research-tools/  @burnjohn
