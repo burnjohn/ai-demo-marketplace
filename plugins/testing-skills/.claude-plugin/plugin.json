@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "testing-skills",
+  "version": "1.0.0",
+  "description": "Testing skill pack. Currently React Testing Library conventions for component and hook tests with Vitest — project-agnostic, no framework assumptions beyond React.",
+  "author": { "name": "burnjohn" },
+  "repository": "https://github.com/burnjohn/ai-demo-marketplace",
+  "keywords": ["testing", "react-testing-library", "vitest", "rtl", "skills"]
+}

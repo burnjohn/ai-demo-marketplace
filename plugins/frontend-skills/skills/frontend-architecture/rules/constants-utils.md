@@ -64,7 +64,7 @@ const SEVERITY_LABELS = {
 }
 
 // ✅ Extract to constants.ts, or use the Zod enum value directly
-import { Severity } from '@devdigest/shared'  // import as VALUE, not `import type`
+import { Severity } from '@/shared/contracts'  // import as VALUE, not `import type`
 
 if (finding.severity === Severity.enum.CRITICAL) { ... }
 
