@@ -18,13 +18,31 @@
     {
       "name": "frontend-skills",
       "source": "./plugins/frontend-skills",
-      "description": "Frontend skill pack for React 19 + Next.js 15: architecture, React/Next patterns, React Testing Library, TypeScript.",
+      "description": "Frontend skill pack for React 19 + Next.js 15 (App Router): code architecture/placement, React best practices, and Next.js patterns.",
+      "category": "development"
+    },
+    {
+      "name": "typescript-skills",
+      "source": "./plugins/typescript-skills",
+      "description": "Language-level TypeScript skill pack: type-level programming, strictness settings, utility types, and a diagnostic script.",
+      "category": "development"
+    },
+    {
+      "name": "testing-skills",
+      "source": "./plugins/testing-skills",
+      "description": "Testing skill pack: React Testing Library conventions for component and hook tests with Vitest.",
+      "category": "development"
+    },
+    {
+      "name": "code-agents",
+      "source": "./plugins/code-agents",
+      "description": "Execution agents usable with or without a spec-driven workflow: `implementer` and `test-writer`.",
       "category": "development"
     },
     {
       "name": "sdd-workflow",
       "source": "./plugins/sdd-workflow",
-      "description": "Spec-Driven Development workflow (spec -> plan -> implement -> test -> verify) + retrospective. Depends on research-tools and frontend-skills.",
+      "description": "Spec-Driven Development workflow (spec -> plan -> implement -> test -> verify -> retro) with slash commands. Depends on research-tools, code-agents and frontend-skills.",
       "category": "workflow"
     }
   ]
