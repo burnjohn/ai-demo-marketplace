@@ -147,7 +147,7 @@ Each recommendation names a target, a change, and the expected payoff. Examples 
 
 - *Brief:* "`implementer` for T-3 needed 2 clarifying round-trips on owned paths — add the sibling
   tasks' owned-paths to its dispatch brief." → fewer round-trips, less token churn.
-- *Duplication:* "3 agents each read `server/docs/architecture.md` (~4k tokens ×3) — have the
+- *Duplication:* "3 agents each read `docs/architecture.md` (~4k tokens ×3) — have the
   orchestrator read it once and pass the relevant excerpt." → ~8k tokens saved per run.
 - *Concurrency:* "review agents ran serially but have disjoint inputs — dispatch them in one
   message." → wall-clock down from Σ to max.
