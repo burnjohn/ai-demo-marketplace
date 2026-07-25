@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "research-tools",
+  "version": "1.0.0",
+  "description": "Read-only research agent that locates, gathers, and fact-checks information from the codebase or the public web and returns it in a structured, cited format. Never edits files.",
+  "author": { "name": "burnjohn" },
+  "repository": "https://github.com/burnjohn/ai-demo-marketplace",
+  "keywords": ["research", "read-only", "agent", "investigation"]
+}

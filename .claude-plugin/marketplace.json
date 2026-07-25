@@ -8,5 +8,24 @@
   "metadata": {
     "description": "AI Demo Marketplace — a Claude Code plugin catalog for the AI Agentic Engineering workshop (skills, agents, hooks, MCP servers)."
   },
-  "plugins": []
+  "plugins": [
+    {
+      "name": "research-tools",
+      "source": "./plugins/research-tools",
+      "description": "Read-only research agent that gathers and fact-checks information from the codebase or the public web.",
+      "category": "development"
+    },
+    {
+      "name": "frontend-skills",
+      "source": "./plugins/frontend-skills",
+      "description": "Frontend skill pack for React 19 + Next.js 15: architecture, React/Next patterns, React Testing Library, TypeScript.",
+      "category": "development"
+    },
+    {
+      "name": "sdd-workflow",
+      "source": "./plugins/sdd-workflow",
+      "description": "Spec-Driven Development workflow (spec -> plan -> implement -> test -> verify) + retrospective. Depends on research-tools and frontend-skills.",
+      "category": "workflow"
+    }
+  ]
 }
