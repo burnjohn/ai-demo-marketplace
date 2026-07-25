@@ -1,0 +1,393 @@
+/*
+ * Home view — visual values pulled from design-ref/02-home.html.
+ *
+ * The 1080px page width and horizontal padding come from `.page--home` in
+ * `../../styles/layout.css`. Never re-declare those here; only owns spacing
+ * *within* the home view.
+ */
+
+.home-view {
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+}
+
+/* -------------------------------- Hero -------------------------------- */
+
+.home-hero {
+  text-align: center;
+  max-width: 720px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home-hero__eyebrow {
+  font-family: var(--font-mono, "IBM Plex Mono", monospace);
+  font-size: 12px;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.home-hero__heading {
+  font-size: 40px;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  margin: 0 0 14px;
+}
+
+.home-hero__heading span {
+  display: block;
+}
+
+.home-hero__description {
+  font-size: 16px;
+  color: var(--text-dim);
+  margin: 0 auto 26px;
+  max-width: 560px;
+  line-height: 1.5;
+}
+
+/* ------------------------------ Hero search ------------------------------ */
+
+.home-hero-search {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.home-hero-search__icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-faint);
+  pointer-events: none;
+}
+
+.home-hero-search input {
+  width: 100%;
+  height: 52px;
+  padding: 0 44px 0 44px;
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  background: var(--bg-elev);
+  color: var(--text);
+  font-size: 15px;
+  box-shadow: 0 4px 24px -12px rgba(0, 0, 0, 0.4);
+  outline: none;
+}
+
+.home-hero-search input::placeholder {
+  color: var(--text-faint);
+}
+
+.home-hero-search button {
+  position: absolute;
+  right: 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px 6px;
+}
+
+.home-hero-search button:hover {
+  color: var(--text);
+}
+
+/* ------------------------------ Keyword chips ---------------------------- */
+
+.home-keywords {
+  width: 100%;
+  margin-top: 16px;
+}
+
+/* The chip row appears directly under the search. The mockup does not label
+ * it visually — the accessible heading stays in the DOM for a11y and tests
+ * but is visually hidden. */
+.home-keywords__heading {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.home-keywords__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.home-keywords__list button {
+  height: 28px;
+  padding: 0 12px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 12px;
+  font-family: var(--font-mono, "IBM Plex Mono", monospace);
+}
+
+.home-keywords__list button::before {
+  content: "#";
+  color: var(--text-faint);
+  margin-right: 1px;
+}
+
+.home-keywords__list button:hover {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+/* -------------------------------- Stats -------------------------------- */
+
+.home-stats__list {
+  /* Mockup uses `repeat(5,1fr)` on ≥720px canvases. At 320px five tiles would
+   * collapse to ~60px each which is unusable, so we start at two columns and
+   * promote to five above a media-query breakpoint. */
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+  .home-stats__list {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.home-stats__button {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.home-stats__button:hover:not(:disabled) {
+  border-color: var(--border-strong);
+  background: var(--bg-hover);
+}
+
+.home-stats__button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.home-stats__count {
+  font-family: var(--font-mono, "IBM Plex Mono", monospace);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.home-stats__label {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+/* ------------------------------ What's new ------------------------------ */
+
+.home-releases {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-releases__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.home-releases__header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text);
+}
+
+.home-releases__feed-link {
+  font-size: 12px;
+  color: var(--text-dim);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.home-releases__feed-link:hover,
+.home-releases__feed-link:focus-visible {
+  color: var(--text);
+}
+
+.home-releases__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.home-releases__list li a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.home-releases__list li a:hover,
+.home-releases__list li a:focus-visible {
+  border-color: var(--border-strong);
+}
+
+.home-releases__version {
+  flex-shrink: 0;
+  font-family: var(--font-mono, "IBM Plex Mono", monospace);
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  color: var(--kind-plugin);
+  background: color-mix(in oklab, var(--kind-plugin) 15%, transparent);
+}
+
+.home-releases__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-releases__name {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.home-releases__summary {
+  color: var(--text-dim);
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-releases__date {
+  flex-shrink: 0;
+  color: var(--text-faint);
+  font-family: var(--font-mono, "IBM Plex Mono", monospace);
+  font-size: 12px;
+}
+
+/* ------------------------------ Browse by kind --------------------------- */
+
+.home-browse__heading {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 14px;
+  color: var(--text);
+}
+
+.home-browse__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.home-browse__button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 16px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.home-browse__button:hover:not(:disabled) {
+  border-color: var(--border-strong);
+}
+
+.home-browse__button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.home-browse__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.home-browse__dot[data-kind="plugin"] {
+  background: var(--kind-plugin);
+}
+.home-browse__dot[data-kind="skill"] {
+  background: var(--kind-skill);
+}
+.home-browse__dot[data-kind="agent"] {
+  background: var(--kind-agent);
+}
+.home-browse__dot[data-kind="command"] {
+  background: var(--kind-command);
+}
+.home-browse__dot[data-kind="hook"] {
+  background: var(--kind-hook);
+}
+.home-browse__dot[data-kind="mcp"] {
+  background: var(--kind-mcp);
+}
+
+.home-browse__label {
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.home-browse__count {
+  font-family: var(--font-mono, "IBM Plex Mono", monospace);
+  font-size: 12px;
+  color: var(--text-faint);
+}

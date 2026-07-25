@@ -5,9 +5,11 @@ name: Deploy site to Pages
 
 on:
   push:
-    branches: [main, 02-demo-website-start]
+    branches: [main]
     paths:
       - 'site/**'
+      - '.claude-plugin/**'
+      - 'plugins/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch: {}
 
@@ -29,6 +31,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Later build steps derive plugin/changelog dates from git history;
+          # a shallow clone would leave that history unavailable.
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -39,6 +45,10 @@ jobs:
       - name: Install deps
         working-directory: site
         run: npm ci
+
+      - name: Typecheck and test
+        working-directory: site
+        run: npm run typecheck && npm run test:run
 
       - name: Vite build
         working-directory: site

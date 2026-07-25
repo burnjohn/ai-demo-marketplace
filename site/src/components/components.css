@@ -1,0 +1,352 @@
+/*
+ * Local styles for the shared presentational primitives.
+ *
+ * Scoped to `.result-card`, `.kind-badge`, `.version-badge`, `.skeleton`,
+ * `.empty-state`, `.error-state` and `.markdown-content` class names owned by
+ * this module. Reads design tokens defined in `site/src/styles/tokens.css`
+ * but does not define or override them. Sizes and paddings are extracted
+ * from the designer mockups (`site/design-ref/03-search.html`,
+ * `04-plugin.html`, `05-artifact.html`) and expressed in px so the visual
+ * result matches the exported markup 1:1.
+ */
+
+/* --- Kind badge --------------------------------------------------------- */
+
+/* Values match the mockup's card-template chip exactly (03-search.html):
+   mono, 11px / 600, 2px×8px padding, 6px radius, 15% tint, no border. */
+.kind-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-family: var(--font-mono, "IBM Plex Mono", ui-monospace, monospace);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.kind-badge[data-kind="plugin"] {
+  background: color-mix(in oklab, var(--kind-plugin) 15%, transparent);
+  color: var(--kind-plugin);
+}
+.kind-badge[data-kind="skill"] {
+  background: color-mix(in oklab, var(--kind-skill) 15%, transparent);
+  color: var(--kind-skill);
+}
+.kind-badge[data-kind="agent"] {
+  background: color-mix(in oklab, var(--kind-agent) 15%, transparent);
+  color: var(--kind-agent);
+}
+.kind-badge[data-kind="command"] {
+  background: color-mix(in oklab, var(--kind-command) 15%, transparent);
+  color: var(--kind-command);
+}
+.kind-badge[data-kind="hook"] {
+  background: color-mix(in oklab, var(--kind-hook) 15%, transparent);
+  color: var(--kind-hook);
+}
+.kind-badge[data-kind="mcp"] {
+  background: color-mix(in oklab, var(--kind-mcp) 15%, transparent);
+  color: var(--kind-mcp);
+}
+
+/* --- Version badge ------------------------------------------------------ */
+
+/* The mockup renders the result-card version as plain faint mono text
+   (no border/background) — 12px mono, `--text-faint`. */
+.version-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono, "IBM Plex Mono", ui-monospace, monospace);
+  font-size: 12px;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.version-badge[data-placeholder="true"] {
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+/* --- Result card -------------------------------------------------------- */
+
+.result-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--bg-elev);
+  overflow: hidden;
+  transition: border-color 150ms ease;
+  min-height: 0;
+}
+
+.result-card:hover,
+.result-card:focus-within {
+  border-color: var(--border-strong);
+}
+
+/* Body padding matches the mockup: 15px top / 16px sides / 12px bottom. */
+.result-card__body {
+  display: flex;
+  flex-direction: column;
+  padding: 15px 16px 12px;
+}
+
+/* Top row: kind chip on the left, version on the right; 9px separation
+   from the title below (per the mockup's `margin-bottom:9px`). */
+.result-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 9px;
+}
+
+.result-card__title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin: 0;
+  /* Single-line clamp keeps card geometry stable regardless of name length
+     — overflow is hidden rather than reflowed, so a very long name
+     never grows the card or pushes neighbouring cards. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.result-card__description {
+  color: var(--text-dim);
+  font-size: 13px;
+  margin: 5px 0 0;
+  /* Two-line clamp with a floor-height matching the mockup (`min-height:38px`)
+     so a short description still reserves space for two lines and cards in
+     the grid line up at the same height. */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  min-height: 38px;
+}
+
+.result-card__keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 11px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.result-card__keyword {
+  font-family: var(--font-mono, "IBM Plex Mono", ui-monospace, monospace);
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+/* Purely decorative "#" prefix — kept out of the text node so it never
+   shows up in getByText()/accessible-name matches (`ResultCard.test.tsx`
+   asserts on the bare keyword string). */
+.result-card__keyword::before {
+  content: "#";
+  color: var(--text-faint);
+}
+
+/* Separated footer bar, matching the mockup's card template — a distinct
+   tinted strip below a border-top, not just more flex gap. */
+.result-card__footer {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+  background: color-mix(in oklab, var(--bg-elev2) 60%, var(--bg));
+}
+
+.result-card__meta {
+  min-width: 0;
+  flex: 1;
+  color: var(--text-faint);
+  font-size: 12px;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.result-card__meta-plugin {
+  font-family: var(--font-mono, "IBM Plex Mono", ui-monospace, monospace);
+  color: var(--text-dim);
+}
+
+.result-card__meta-sep,
+.result-card__meta-author {
+  color: var(--text-faint);
+}
+
+.result-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* The "Open" primary control — an accent-filled anchor styled to look like
+   the mockup's `<button>` (height 28px, radius 7px, weight 600). It is a
+   real `<a>` so middle-click / Ctrl-click still work and the accessible
+   name/href contract survives. */
+/*
+ * Scoped with `.app` on purpose: `src/styles/base.css` sets `.app a { color:
+ * var(--accent) }`, which at (0,1,1) outranks a bare `.result-card__open`
+ * (0,1,0) and painted the label in the accent colour on top of the accent
+ * background -- an invisible label on a filled button. Do not drop the `.app`.
+ */
+.app .result-card__open {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  padding: 0 12px;
+  background: var(--accent);
+  border: none;
+  border-radius: 7px;
+  color: var(--accent-fg);
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.app .result-card__open:hover {
+  text-decoration: none;
+  filter: brightness(1.05);
+}
+
+.app .result-card__open:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* --- Empty / error states ---------------------------------------------- */
+
+.empty-state,
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 1.75rem 1.5rem;
+  border: 1px dashed var(--border-strong);
+  border-radius: 14px;
+  background: var(--bg-elev);
+  color: var(--text-dim);
+  text-align: left;
+}
+
+.empty-state h2,
+.error-state h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.empty-state p,
+.error-state p {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+.error-state {
+  border-style: solid;
+  border-color: var(--border);
+}
+
+.empty-state__actions,
+.error-state__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+/* Match the mockup's "Reset filters" secondary control treatment: neutral
+   surface, subtle border, 34px tall. */
+.error-state__actions button,
+.empty-state__actions button {
+  height: 34px;
+  padding: 0 16px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.error-state__actions button:hover,
+.empty-state__actions button:hover {
+  border-color: var(--border-strong);
+}
+
+.error-state__actions button:focus-visible,
+.empty-state__actions button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.error-state__actions a,
+.empty-state__actions a {
+  color: var(--accent);
+  font-size: 13px;
+  align-self: center;
+}
+
+/* --- Skeleton ---------------------------------------------------------- */
+
+.skeleton {
+  display: block;
+  border-radius: 0.5rem;
+  background: color-mix(in oklab, var(--bg-elev2) 80%, var(--bg));
+  /* The skeleton reserves the same box the real content will occupy, so
+     first paint before hydration does not shift layout. */
+}
+
+.skeleton--card {
+  height: 9rem;
+  width: 100%;
+  border-radius: 13px;
+}
+
+.skeleton--text {
+  height: 1em;
+  width: 100%;
+}
+
+.skeleton--block {
+  height: 6rem;
+  width: 100%;
+}
+
+/* --- Markdown content -------------------------------------------------- */
+
+.markdown-content {
+  color: var(--text);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.markdown-content img {
+  max-width: 100%;
+}

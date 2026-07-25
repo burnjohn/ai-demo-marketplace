@@ -74,3 +74,36 @@ claude --plugin-dir ./plugins/<name>       # plugin actually loads, no missing-s
 ```
 
 Schema validation checks **shape**; evals check **behavior**. Keep both.
+
+## Appearing well-formed in the catalog site
+
+The catalog site (`site/`, see `site/README.md`) generates its entire index from this repository at
+build time. What each plugin provides determines what renders for it — see
+`site/specs/2026-07-25-catalog-site-mvp.md` for the full acceptance criteria; this section only
+summarizes the practical consequence of providing (or omitting) each file/field.
+
+**Required — a missing one fails the catalog build, not just this plugin's page:**
+
+- A parseable `.claude-plugin/plugin.json`. An unparseable manifest fails the whole site build, naming
+  the offending plugin.
+- A unique plugin `name`, and unique identifiers for every artifact it declares. A duplicate plugin
+  name or duplicate artifact identifier also fails the whole site build, naming both sources of the
+  collision.
+
+**Optional — the plugin still builds and appears, but degrades in a specific, visible way:**
+
+| Missing | Consequence in the catalog |
+| --- | --- |
+| `README.md` | A contribution placeholder renders instead of documentation |
+| `CHANGELOG.md` | A placeholder renders on the plugin/artifact page, **and** the plugin never appears in the `#/whats-new` release feed |
+| `version` in `plugin.json` | A neutral placeholder badge instead of a version badge |
+| `keywords` in `plugin.json` | No keyword chips render for the plugin, and it is absent from keyword facets in search |
+| `description`, `author` | Rendered as absent/omitted rather than blank or "undefined" |
+| Declared dependencies | Omitted from the dependency list; nothing to jump to |
+| `compatibility` statement | The compatibility badge is omitted entirely |
+
+**Dates come from CHANGELOG headings, not from the manifest.** The release feed and detail pages derive
+a plugin's release dates from **dated CHANGELOG headings** found in git history — not from any field in
+`plugin.json`. A CHANGELOG with undated headings (e.g. a heading added today with no date in it) renders
+that entry dateless rather than with today's date, and dateless entries sort after every dated one. If
+you want a plugin's changes to show a date in `#/whats-new`, give the CHANGELOG heading an explicit date.

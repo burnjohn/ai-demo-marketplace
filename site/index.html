@@ -5,9 +5,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AI Demo Marketplace</title>
   <meta name="description" content="Catalog site for the AI Demo Marketplace — Claude Code plugins, skills and agents." />
+  <script>
+    (function () {
+      // Pre-paint theme/accent application (AC-18): read the persisted
+      // choices and set them on <html> before first paint, so there is no
+      // flash of the wrong theme. The header's theme/accent controls (a
+      // later task) must read and write these exact keys and values:
+      //   localStorage key "ai-demo-marketplace:theme"   -> "dark" | "light"
+      //   localStorage key "ai-demo-marketplace:accent"  -> "default" | "green" | "violet" | "amber"
+      // Attributes are applied to <html> (not a React-rendered node) so they
+      // exist before the app mounts. <html> also gets the "app" class so the
+      // `.app[data-theme=...]` token selectors in src/styles/tokens.css match.
+      var root = document.documentElement;
+      root.classList.add("app");
+      var theme;
+      try {
+        theme = window.localStorage.getItem("ai-demo-marketplace:theme");
+      } catch (e) {
+        theme = null;
+      }
+      if (theme !== "dark" && theme !== "light") {
+        theme =
+          window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches
+            ? "light"
+            : "dark";
+      }
+      root.setAttribute("data-theme", theme);
+
+      var accent;
+      try {
+        accent = window.localStorage.getItem("ai-demo-marketplace:accent");
+      } catch (e) {
+        accent = null;
+      }
+      if (["default", "green", "violet", "amber"].indexOf(accent) === -1) {
+        accent = "default";
+      }
+      root.setAttribute("data-accent", accent);
+    })();
+  </script>
 </head>
 <body>
   <div id="root"></div>
+  <noscript>
+    This catalog requires JavaScript to render. Please enable JavaScript in your browser, or browse
+    the source directly on
+    <a href="https://github.com/burnjohn/ai-demo-marketplace">GitHub</a>.
+  </noscript>
   <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>

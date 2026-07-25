@@ -1,0 +1,48 @@
+  <!-- ============ ARTIFACT DETAIL ============ -->
+  <sc-if value="{{ isArtifact }}" hint-placeholder-val="{{ false }}">
+  <main style="max-width:820px;margin:0 auto;padding:26px 22px 80px">
+    <div style="font-size:13px;color:var(--text-dim);margin-bottom:18px">
+      <a onClick="{{ backToSearch }}" style="cursor:pointer">Каталог</a>
+      <span style="color:var(--text-faint)"> / </span>
+      <a onClick="{{ art.onParent }}" style="cursor:pointer">{{ art.pluginLabel }}</a>
+      <span style="color:var(--text-faint)"> / {{ art.name }}</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;padding:3px 9px;border-radius:6px;text-transform:capitalize;color:var(--kind-{{ art.kind }});background:color-mix(in oklab, var(--kind-{{ art.kind }}) 15%, transparent)">{{ art.kind }}</span>
+      <h1 style="font-size:24px;font-weight:700;margin:0;letter-spacing:-.02em">{{ art.displayName }}</h1>
+      <sc-if value="{{ art.hasInvocation }}" hint-placeholder-val="{{ false }}">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--accent);background:color-mix(in oklab, var(--accent) 12%, transparent);padding:3px 9px;border-radius:6px">{{ art.invocation }}</span>
+      </sc-if>
+    </div>
+    <p style="color:var(--text-dim);margin:8px 0 0;max-width:600px">{{ art.description }}</p>
+
+    <sc-if value="{{ art.hasTools }}" hint-placeholder-val="{{ false }}">
+    <div style="margin-top:16px">
+      <div style="font-size:11px;font-weight:600;color:var(--text-faint);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Tools / permissions</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        <sc-for list="{{ art.tools }}" as="t" hint-placeholder-count="3">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding:4px 10px;border-radius:7px;background:var(--bg-elev);border:1px solid var(--border);color:var(--text-dim)">{{ t }}</span>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <div style="display:flex;align-items:stretch;gap:10px;margin:22px 0 30px">
+      <div style="flex:1;display:flex;align-items:center;gap:10px;background:#000;border:1px solid var(--border);border-radius:10px;padding:0 14px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#cfe">
+        <span style="color:var(--text-faint)">$</span>
+        <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ art.installText }}</span>
+      </div>
+      <button onClick="{{ art.onCopy }}" style="height:44px;padding:0 18px;background:var(--accent);border:none;border-radius:10px;color:var(--accent-fg);font-weight:600;cursor:pointer">{{ art.copyLabel }}</button>
+    </div>
+
+    <section>
+      <h2 style="font-size:15px;font-weight:600;margin:0 0 12px">Документація</h2>
+      <div style="background:var(--bg-elev);border:1px solid var(--border);border-radius:13px;padding:22px 24px">
+        <sc-for list="{{ art.body }}" as="p" hint-placeholder-count="3">
+          <p style="margin:0 0 12px;color:var(--text-dim);line-height:1.65">{{ p }}</p>
+        </sc-for>
+      </div>
+    </section>
+  </main>
+  </sc-if>
+

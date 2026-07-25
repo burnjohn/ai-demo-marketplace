@@ -80,6 +80,9 @@ def accumulate(path):
         "tool_calls": 0,
         "assistant_turns": 0,
         "models": set(),
+        # per-model token sub-totals, so a mixed-model agent is priced per turn
+        # rather than at whichever model sorts first. {model: {in,out,cr,cw}}
+        "by_model": {},
         "ts_first": None,
         "ts_last": None,
         "lines": 0,
@@ -109,10 +112,22 @@ def accumulate(path):
                 usage = msg.get("usage") or {}
                 if usage:
                     agg["assistant_turns"] += 1
-                    agg["input"] += usage.get("input_tokens", 0) or 0
-                    agg["output"] += usage.get("output_tokens", 0) or 0
-                    agg["cache_read"] += usage.get("cache_read_input_tokens", 0) or 0
-                    agg["cache_write"] += usage.get("cache_creation_input_tokens", 0) or 0
+                    t_in = usage.get("input_tokens", 0) or 0
+                    t_out = usage.get("output_tokens", 0) or 0
+                    t_cr = usage.get("cache_read_input_tokens", 0) or 0
+                    t_cw = usage.get("cache_creation_input_tokens", 0) or 0
+                    agg["input"] += t_in
+                    agg["output"] += t_out
+                    agg["cache_read"] += t_cr
+                    agg["cache_write"] += t_cw
+                    bm = agg["by_model"].setdefault(
+                        msg.get("model") or "?",
+                        {"in": 0, "out": 0, "cache_read": 0, "cache_write": 0},
+                    )
+                    bm["in"] += t_in
+                    bm["out"] += t_out
+                    bm["cache_read"] += t_cr
+                    bm["cache_write"] += t_cw
                 content = msg.get("content")
                 if isinstance(content, list):
                     for block in content:
@@ -133,17 +148,28 @@ def price_for(model, prices):
 
 
 def cost_of(agg, prices):
-    model = sorted(agg["models"])[0] if agg["models"] else None
-    p = price_for(model, prices)
-    if not p:
-        return None
+    """Per-model cost, summed. Returns (total, components) or (None, None).
+
+    Priced per model *per turn* — an agent whose journal mixes models (e.g. a
+    resumed agent, or one that fell back) is not charged entirely at whichever
+    model happens to sort first. Returns None when no turn's model matches the
+    price map, so an unpriced run reports n/a rather than a silent zero.
+    """
+    if not prices:
+        return None, None
     m = 1_000_000
-    return (
-        agg["input"] / m * p.get("in", 0)
-        + agg["output"] / m * p.get("out", 0)
-        + agg["cache_read"] / m * p.get("cache_read", 0)
-        + agg["cache_write"] / m * p.get("cache_write", 0)
-    )
+    comp = {"in": 0.0, "out": 0.0, "cache_read": 0.0, "cache_write": 0.0}
+    matched = False
+    for model, tok in agg["by_model"].items():
+        p = price_for(model, prices)
+        if not p:
+            continue
+        matched = True
+        for k in comp:
+            comp[k] += tok[k] / m * p.get(k, 0)
+    if not matched:
+        return None, None
+    return sum(comp.values()), comp
 
 
 def span_seconds(agg):
@@ -188,14 +214,15 @@ def main():
     rows.sort(key=lambda a: (a["ts_first"] or datetime.max.replace(tzinfo=timezone.utc)))
 
     total = {"input": 0, "output": 0, "cache_read": 0, "cache_write": 0,
-             "tool_calls": 0, "cost": 0.0, "has_cost": False}
+             "tool_calls": 0, "cost": 0.0, "has_cost": False,
+             "comp": {"in": 0.0, "out": 0.0, "cache_read": 0.0, "cache_write": 0.0}}
     sum_span = 0.0
     wall_first = None
     wall_last = None
 
     out_rows = []
     for a in rows:
-        c = cost_of(a, prices)
+        c, comp = cost_of(a, prices)
         sp = span_seconds(a)
         if sp:
             sum_span += sp
@@ -210,6 +237,8 @@ def main():
         if c is not None:
             total["cost"] += c
             total["has_cost"] = True
+            for k in total["comp"]:
+                total["comp"][k] += comp[k]
         out_rows.append({
             "agent": a["agent"],
             "type": a["type"],
@@ -245,6 +274,13 @@ def main():
         "sum_agent_span_s": round(sum_span, 1),
         "parallelism": parallelism,
         "cost_usd": round(total["cost"], 4) if total["has_cost"] else None,
+        # Where the money actually went. cache_write is often the largest line —
+        # every freshly-spawned agent writes its own prefix at a premium — so
+        # read this before recommending any context/duplication optimisation.
+        "cost_components_usd": (
+            {k: round(v, 4) for k, v in total["comp"].items()}
+            if total["has_cost"] else None
+        ),
     }
 
     if args.json:
@@ -253,19 +289,20 @@ def main():
 
     # human table — nested agents (spawnDepth > 1) are indented but counted in TOTAL
     print(f"{'agent (└ = nested)':<30} {'type':<14} {'in':>9} {'out':>8} {'c-read':>9} "
-          f"{'hit':>5} {'tools':>5} {'span':>7} {'cost':>8}")
-    print("-" * 105)
+          f"{'c-write':>9} {'hit':>5} {'tools':>5} {'span':>7} {'cost':>8}")
+    print("-" * 115)
     for r in out_rows:
         depth = r["depth"] or 1
         indent = ("  " * (depth - 1)) + ("└ " if depth > 1 else "")
         name = (indent + r["agent"])[:30]
         print(f"{name:<30} {(r['type'] or '?')[:14]:<14} "
               f"{fmt_int(r['input']):>9} {fmt_int(r['output']):>8} "
-              f"{fmt_int(r['cache_read']):>9} {r['cache_hit']*100:>4.0f}% "
+              f"{fmt_int(r['cache_read']):>9} {fmt_int(r['cache_write']):>9} "
+              f"{r['cache_hit']*100:>4.0f}% "
               f"{r['tool_calls']:>5} "
               f"{(str(r['span_s'])+'s') if r['span_s'] else '-':>7} "
               f"{('$'+format(r['cost_usd'],'.4f')) if r['cost_usd'] is not None else 'n/a':>8}")
-    print("-" * 105)
+    print("-" * 115)
     print(f"TOTAL agents={summary['agents']} (nested={summary['nested_agents']}, "
           f"max_depth={summary['max_depth']})  in={fmt_int(summary['input'])}  "
           f"out={fmt_int(summary['output'])}  cache_read={fmt_int(summary['cache_read'])}  "
@@ -274,6 +311,27 @@ def main():
           f"parallelism={summary['parallelism']}x  "
           f"cost={'$'+format(summary['cost_usd'],'.4f') if summary['cost_usd'] is not None else 'n/a (pass --prices)'}")
     print("note: totals INCLUDE all nested sub-agents (spawnDepth > 1).")
+
+    if summary["cost_components_usd"]:
+        comp = summary["cost_components_usd"]
+        tc = summary["cost_usd"] or 0.0
+        parts = " ".join(
+            f"{k}=${v:.2f} ({(v / tc * 100) if tc else 0:.0f}%)"
+            for k, v in sorted(comp.items(), key=lambda kv: -kv[1])
+        )
+        print(f"cost split: {parts}")
+        print("note: the TOTAL above is the sum of the per-agent cost column — if your")
+        print("      report's table does not add up to it, the table is wrong, not this.")
+        if comp["cache_write"] > comp["out"]:
+            print("note: cache_write outweighs output tokens. Each freshly-spawned agent")
+            print("      writes its own prefix at a premium, so 'fewer, longer-lived")
+            print("      agents' saves more here than trimming duplicated reads.")
+    else:
+        print("")
+        print("!! cost=n/a — NO price map was supplied, so no cost was computed.")
+        print("!! Report cost as n/a, or re-run with --prices. Do NOT hand-estimate a")
+        print("!! per-agent cost column: cache_write alone is often ~40% of real spend")
+        print("!! and eyeballed columns will not reconcile with any total.")
     return 0
 
 

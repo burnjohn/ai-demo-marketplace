@@ -1,0 +1,77 @@
+/*
+ * Design tokens: data-theme (dark|light) x data-accent (default|green|violet|amber).
+ * Values are taken from the reference mockup in `design-ref/`. Kept as plain
+ * oklch() custom properties on purpose -- `scripts/check-contrast.mjs` converts
+ * them programmatically to sRGB. Never compute a token value inline here.
+ */
+
+.app {
+  --bg: #0b0c0f;
+  --bg-elev: #101217;
+  --bg-elev2: #161920;
+  --bg-hover: #1c2029;
+  /*
+   * --border, --border-strong and --text-faint below were raised from the
+   * mockup's original values (#23262f, #33384380, #5f6672) to clear the
+   * 3:1 / 4.5:1 contrast minimums against --bg / --bg-elev (see
+   * scripts/check-contrast.mjs).
+   * Hue (240, a neutral blue-gray matching the mockup's intent) and chroma
+   * are unchanged from the mockup's greys -- only lightness moved.
+   */
+  --border: oklch(0.52 0.02 240);
+  --border-strong: oklch(0.58 0.02 240);
+  --text: #e8eaef;
+  --text-dim: #98a0ae;
+  --text-faint: oklch(0.6 0.02 240);
+  --accent: oklch(0.68 0.15 255);
+  --accent-fg: #fff;
+
+  --kind-plugin: oklch(0.72 0.15 255);
+  --kind-skill: oklch(0.74 0.14 158);
+  --kind-agent: oklch(0.72 0.15 305);
+  --kind-command: oklch(0.76 0.14 55);
+  --kind-hook: oklch(0.78 0.14 115);
+  --kind-mcp: oklch(0.7 0.16 20);
+}
+
+.app[data-theme="light"] {
+  --bg: #f6f7f9;
+  --bg-elev: #ffffff;
+  --bg-elev2: #ffffff;
+  --bg-hover: #eef0f4;
+  --border: oklch(0.63 0.02 240);
+  --border-strong: oklch(0.6 0.02 240);
+  --text: #161a20;
+  --text-dim: #5a626e;
+  --text-faint: oklch(0.52 0.02 240);
+  --accent: oklch(0.55 0.17 255);
+  --accent-fg: #fff;
+
+  --kind-plugin: oklch(0.52 0.16 255);
+  --kind-skill: oklch(0.5 0.14 158);
+  --kind-agent: oklch(0.52 0.16 305);
+  --kind-command: oklch(0.55 0.15 55);
+  --kind-hook: oklch(0.52 0.14 132);
+  --kind-mcp: oklch(0.53 0.18 20);
+}
+
+.app[data-accent="green"] {
+  --accent: oklch(0.7 0.14 158);
+}
+.app[data-accent="green"][data-theme="light"] {
+  --accent: oklch(0.5 0.14 158);
+}
+
+.app[data-accent="violet"] {
+  --accent: oklch(0.68 0.16 305);
+}
+.app[data-accent="violet"][data-theme="light"] {
+  --accent: oklch(0.53 0.17 305);
+}
+
+.app[data-accent="amber"] {
+  --accent: oklch(0.76 0.14 65);
+}
+.app[data-accent="amber"][data-theme="light"] {
+  --accent: oklch(0.6 0.15 60);
+}
