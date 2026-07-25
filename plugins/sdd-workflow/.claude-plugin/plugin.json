@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "sdd-workflow",
+  "version": "1.0.0",
+  "description": "Spec-Driven Development workflow for frontend work: spec -> plan -> implement -> test -> verify, plus a multi-agent retrospective. Depends on research-tools and frontend-skills.",
+  "author": { "name": "burnjohn" },
+  "repository": "https://github.com/burnjohn/ai-demo-marketplace",
+  "keywords": ["sdd", "spec-driven", "workflow", "agents", "planning"],
+  "dependencies": [
+    { "name": "research-tools", "version": "^1.0.0" },
+    { "name": "frontend-skills", "version": "^1.0.0" }
+  ]
+}
