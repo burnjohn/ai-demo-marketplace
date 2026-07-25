@@ -4,5 +4,9 @@
 
 # Per-plugin owners are added when each plugin is added.
 # Ownership = responsibility for review and maintenance, not exclusivity.
-# Example:
-# /plugins/research-tools/  @burnjohn
+/plugins/research-tools/    @burnjohn
+/plugins/frontend-skills/   @burnjohn
+/plugins/typescript-skills/ @burnjohn
+/plugins/testing-skills/    @burnjohn
+/plugins/code-agents/       @burnjohn
+/plugins/sdd-workflow/      @burnjohn

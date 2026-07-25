@@ -18,7 +18,12 @@ The catalog lives separately from any product — its own owner, its own release
 /plugin install <plugin-name>@ai-demo-marketplace
 ```
 
-`<plugin-name>` is the `name` of an entry in `.claude-plugin/marketplace.json`; `ai-demo-marketplace` is the catalog name. The baseline ships with no plugins yet — the catalog fills up as the workshop progresses.
+`<plugin-name>` is the `name` of an entry in `.claude-plugin/marketplace.json`; `ai-demo-marketplace` is the catalog name.
+
+The catalog currently ships six plugins in three layers — knowledge packs (`frontend-skills`,
+`typescript-skills`, `testing-skills`), agents (`research-tools`, `code-agents`), and a workflow
+(`sdd-workflow`). Each layer is installable on its own; `sdd-workflow` pulls what it needs through its
+declared `dependencies`. See [`plugins/README.md`](./plugins/README.md) for the dependency table.
 
 ## Updating (two different things)
 
@@ -32,8 +37,8 @@ Refreshing the catalog does not update installed plugins by itself.
 ## Repository layout
 
 ```
-.claude-plugin/marketplace.json   # the catalog (plugin registry) — empty in the baseline
-plugins/                          # each plugin in its own subdirectory (added during the workshop)
+.claude-plugin/marketplace.json   # the catalog (plugin registry)
+plugins/                          # each plugin in its own subdirectory — see plugins/README.md
 docs/PLUGIN-GUIDELINES.md         # plugin anatomy (manifest, dependencies)
 docs/SECURITY.md                  # permissions, secrets policy
 docs/RELEASES.md                  # SemVer, tags, update, rollback

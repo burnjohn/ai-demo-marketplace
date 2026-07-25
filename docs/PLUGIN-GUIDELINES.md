@@ -66,6 +66,33 @@ Example:
 - Reference dependency components **namespaced**: `research-tools:researcher`, not bare `researcher`. Replace bare names with namespaced ones during extraction.
 - Pin dependency versions with constraints (e.g. `^1.0.0`) so the installer can show the full dependency graph before confirmation.
 
+### Two mechanisms, not one
+
+| Where | When it applies | What it does |
+| --- | --- | --- |
+| `dependencies` in `plugin.json` | install time | Declares plugins that must be **enabled** for this one to function |
+| `skills:` in an agent's frontmatter | runtime | Declares which skills are **injected** into that subagent at startup |
+
+Both are usually needed: `dependencies` guarantees the plugin is present, `skills:` guarantees the agent
+can see the skill. Neither replaces the other.
+
+**Use the string form for `dependencies`.** The object form accepts only `name` and `marketplace` — it
+has no `version` field, so a range written there is silently ignored:
+
+```jsonc
+"dependencies": [
+  "research-tools",                              // bare name → resolved in this same marketplace
+  "typescript-skills@ai-demo-marketplace",       // explicit marketplace
+  "frontend-skills@ai-demo-marketplace@^2.0.0"   // + semver range  ← preferred
+]
+```
+
+**Hard vs optional.** Declare a dependency only when the plugin genuinely cannot function without it —
+each hard dependency narrows the audience. For a skill that only some projects need, leave it out of both
+the manifest and the frontmatter, and have the agent reach for it via the `Skill` tool when available,
+reporting the gap when not. `code-agents` does this: `typescript-skills` is hard, while `frontend-skills`
+and `testing-skills` are optional, so backend-only projects can use it without React guidance.
+
 ## Before a PR
 
 ```bash
