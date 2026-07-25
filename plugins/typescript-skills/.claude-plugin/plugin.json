@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "typescript-skills",
+  "version": "1.0.0",
+  "description": "Language-level TypeScript skill pack: type-level programming, strictness settings, utility types, and a diagnostic script. Stack-agnostic — useful in frontend, Node backend, and library projects alike.",
+  "author": { "name": "burnjohn" },
+  "repository": "https://github.com/burnjohn/ai-demo-marketplace",
+  "keywords": ["typescript", "types", "strict", "tooling", "skills"]
+}

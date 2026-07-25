@@ -1,9 +1,9 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "frontend-skills",
-  "version": "1.0.0",
-  "description": "Frontend engineering skill pack for React 19 + Next.js 15 (App Router): code architecture/placement, React best practices, Next.js patterns, React Testing Library, and TypeScript.",
+  "version": "2.0.0",
+  "description": "Frontend engineering skill pack for React 19 + Next.js 15 (App Router): code architecture/placement, React best practices, and Next.js patterns. TypeScript now lives in `typescript-skills`; React Testing Library in `testing-skills`.",
   "author": { "name": "burnjohn" },
   "repository": "https://github.com/burnjohn/ai-demo-marketplace",
-  "keywords": ["react", "nextjs", "frontend", "testing", "typescript", "skills"]
+  "keywords": ["react", "nextjs", "frontend", "architecture", "skills"]
 }
