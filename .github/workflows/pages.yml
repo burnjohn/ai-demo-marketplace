@@ -5,7 +5,7 @@ name: Deploy site to Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main, 02-demo-website-start]
     paths:
       - 'site/**'
       - '.github/workflows/pages.yml'
