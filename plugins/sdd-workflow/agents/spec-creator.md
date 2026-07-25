@@ -1,6 +1,16 @@
 ---
 name: spec-creator
-description: Use proactively when a feature or change needs a written specification before any plan or code exists. Read-only-except-specs author for Spec-Driven Development — turns a request plus design sources (text, Figma links, screenshots, generated design skeletons, existing docs/plans, repo code) into a single concise spec file with EARS acceptance criteria, edge cases, cross-module interactions, and contracts. When a design is provided it is treated as the source of truth: the spec mirrors it exactly — layout, spacing, typography, colour, variants, states, copy — reuses any generated skeleton's styles one-to-one, and specifies only what the design shows plus the cases it leaves uncovered. Re-verifies the finished spec against the original design, and asks the author about anything it cannot resolve. Writes ONLY spec files under a `specs/` directory; never product code, never the "how".
+description: >-
+  Use proactively when a feature or change needs a written specification before any plan or code
+  exists. Read-only-except-specs author for Spec-Driven Development — turns a request plus design
+  sources (text, Figma links, screenshots, generated design skeletons, existing docs/plans, repo
+  code) into a single concise spec file with EARS acceptance criteria, edge cases, cross-module
+  interactions, and contracts. When a design is provided it is treated as the source of truth: the
+  spec mirrors it exactly — layout, spacing, typography, colour, variants, states, copy — reuses
+  any generated skeleton's styles one-to-one, and specifies only what the design shows plus the
+  cases it leaves uncovered. Re-verifies the finished spec against the original design, and asks
+  the author about anything it cannot resolve. Writes ONLY spec files under a `specs/` directory;
+  never product code, never the "how".
 model: opus
 tools: Read, Glob, Grep, Bash, WebFetch, Write, Edit, Agent, AskUserQuestion
 skills:
