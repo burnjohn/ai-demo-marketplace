@@ -1,0 +1,25 @@
+  <!-- ============ WHAT'S NEW ============ -->
+  <sc-if value="{{ isWhatsNew }}" hint-placeholder-val="{{ false }}">
+  <main style="max-width:760px;margin:0 auto;padding:26px 22px 80px">
+    <button onClick="{{ goHome }}" style="background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:13px;padding:0;margin-bottom:18px">← На головну</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
+      <h1 style="font-size:26px;font-weight:700;margin:0;letter-spacing:-.02em">Що нового</h1>
+      <a href="{{ repoUrl }}" target="_blank" style="font-size:12px;font-family:'IBM Plex Mono',monospace;padding:6px 12px;border:1px solid var(--border);border-radius:8px;color:var(--text-dim)">Subscribe · RSS</a>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <sc-for list="{{ whatsNewFull }}" as="r" hint-placeholder-count="6">
+        <div onClick="{{ r.onOpen }}" style="display:flex;gap:16px;padding:16px 18px;background:var(--bg-elev);border:1px solid var(--border);border-radius:12px;cursor:pointer" style-hover="border-color:var(--border-strong)">
+          <div style="flex-shrink:0;text-align:right;width:74px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:var(--kind-plugin)">v{{ r.version }}</div>
+            <div style="font-size:11px;color:var(--text-faint);font-family:'IBM Plex Mono',monospace">{{ r.date }}</div>
+          </div>
+          <div style="flex:1">
+            <div style="font-weight:600">{{ r.displayName }}</div>
+            <div style="font-size:13px;color:var(--text-dim);margin-top:2px">{{ r.summary }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </main>
+  </sc-if>
+
