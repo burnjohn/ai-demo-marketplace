@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "code-agents",
+  "version": "1.0.0",
+  "description": "Two execution agents usable with or without a spec-driven workflow: `implementer` (build one task and self-verify) and `test-writer` (add or extend tests without changing production behavior).",
+  "author": { "name": "burnjohn" },
+  "repository": "https://github.com/burnjohn/ai-demo-marketplace",
+  "keywords": ["agents", "implementation", "testing", "delegation"],
+  "dependencies": ["typescript-skills@ai-demo-marketplace@^1.0.0"]
+}
