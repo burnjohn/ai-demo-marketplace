@@ -1,0 +1,33 @@
+  <!-- ============ COMMAND PALETTE ============ -->
+  <sc-if value="{{ paletteOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ onClosePalette }}" style="position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);display:flex;align-items:flex-start;justify-content:center;padding-top:12vh;animation:fade .12s ease">
+    <div onClick="{{ stop }}" style="width:600px;max-width:92vw;background:var(--bg-elev);border:1px solid var(--border-strong);border-radius:14px;overflow:hidden;box-shadow:0 24px 60px -20px rgba(0,0,0,.7);animation:pop .14s ease">
+      <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border)">
+        <span style="color:var(--text-faint)">⌕</span>
+        <input value="{{ paletteQuery }}" onInput="{{ onPaletteInput }}" placeholder="Перейти до артефакту…" autofocus="true" style="flex:1;background:none;border:none;outline:none;color:var(--text);font-size:15px" />
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-faint);border:1px solid var(--border);padding:1px 6px;border-radius:5px">ESC</span>
+      </div>
+      <div style="max-height:52vh;overflow:auto;padding:6px">
+        <sc-for list="{{ paletteResults }}" as="p" hint-placeholder-count="5">
+          <button onClick="{{ p.onOpen }}" style="display:flex;align-items:center;gap:12px;width:100%;padding:9px 12px;background:none;border:none;border-radius:9px;cursor:pointer;color:var(--text);text-align:left" style-hover="background:var(--bg-hover)">
+            <span style="width:8px;height:8px;border-radius:50%;background:var(--kind-{{ p.kind }});flex-shrink:0"></span>
+            <span style="flex:1;min-width:0"><span style="font-weight:500">{{ p.displayName }}</span> <span style="font-size:12px;color:var(--text-faint)">· {{ p.metaLabel }}</span></span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-faint);text-transform:capitalize">{{ p.kind }}</span>
+          </button>
+        </sc-for>
+        <sc-if value="{{ paletteEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:26px;text-align:center;color:var(--text-faint);font-size:13px">Нічого не знайдено</div>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- TOAST -->
+  <sc-if value="{{ showToast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:70;display:flex;align-items:center;gap:8px;background:var(--bg-elev2);border:1px solid var(--border-strong);border-radius:10px;padding:10px 16px;font-size:13px;box-shadow:0 12px 30px -10px rgba(0,0,0,.6);animation:pop .16s ease">
+      <span style="color:var(--kind-skill)">✓</span> Скопійовано в буфер
+    </div>
+  </sc-if>
+
+</div>

@@ -1,0 +1,127 @@
+/*
+ * What's New — narrow reading column of release rows (design-ref/06-whats-new.html).
+ * Uses design tokens only. Page width and padding come from `layout.css`
+ * (`.page--whats-new`) and are NOT redeclared here.
+ */
+
+.whats-new-view {
+  display: flex;
+  flex-direction: column;
+}
+
+/* "← Back to home" — visually plain link above the heading (mockup line 4). */
+.whats-new-view__back {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 18px;
+  color: var(--text-dim);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.whats-new-view__back:hover,
+.whats-new-view__back:focus-visible {
+  color: var(--text);
+}
+
+.whats-new-view__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.whats-new-view__heading {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.whats-new-view__subscribe {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-dim);
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.whats-new-view__subscribe:hover,
+.whats-new-view__subscribe:focus-visible {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+.whats-new__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.whats-new__entry {
+  display: block;
+}
+
+.whats-new__entry-link {
+  display: flex;
+  gap: 16px;
+  padding: 16px 18px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.whats-new__entry-link:hover,
+.whats-new__entry-link:focus-visible {
+  border-color: var(--border-strong);
+}
+
+.whats-new__entry-meta {
+  flex-shrink: 0;
+  width: 74px;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.whats-new__entry-version {
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--kind-plugin);
+}
+
+.whats-new__entry-date {
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+.whats-new__entry-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.whats-new__entry-plugin {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.whats-new__entry-summary {
+  font-size: 13px;
+  color: var(--text-dim);
+}

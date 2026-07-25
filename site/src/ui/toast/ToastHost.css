@@ -1,0 +1,51 @@
+/*
+ * Toast pill (design-ref/08-palette-and-toast.html). Uses design tokens
+ * only. The keyframes below are neutralised globally by
+ * `src/styles/motion.css` under `prefers-reduced-motion: reduce` — do not
+ * re-guard here.
+ */
+
+@keyframes toast-host-pop {
+  from {
+    transform: translate(-50%, 8px) scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, 0) scale(1);
+    opacity: 1;
+  }
+}
+
+/*
+ * The live region is always mounted so screen readers pick up the announced
+ * text change. It has no visual footprint of its own — the visible pill is
+ * the child rendered only while a message exists.
+ */
+.toast-host {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 70;
+}
+
+.toast-host__pill {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--bg-elev2);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.6);
+  color: var(--text);
+  font-size: 13px;
+  animation: toast-host-pop 0.16s ease;
+}
+
+.toast-host__check {
+  color: var(--kind-skill);
+}

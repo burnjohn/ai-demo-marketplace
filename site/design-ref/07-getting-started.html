@@ -1,0 +1,28 @@
+  <!-- ============ GETTING STARTED ============ -->
+  <sc-if value="{{ isGettingStarted }}" hint-placeholder-val="{{ false }}">
+  <main style="max-width:720px;margin:0 auto;padding:26px 22px 80px">
+    <button onClick="{{ goHome }}" style="background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:13px;padding:0;margin-bottom:18px">← На головну</button>
+    <h1 style="font-size:28px;font-weight:700;margin:0 0 8px;letter-spacing:-.02em">Як підключити marketplace</h1>
+    <p style="color:var(--text-dim);margin:0 0 32px;max-width:560px">Три кроки. Спершу додай marketplace як джерело, потім став окремі плагіни.</p>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <sc-for list="{{ steps }}" as="st" hint-placeholder-count="3">
+        <div style="display:flex;gap:16px">
+          <div style="flex-shrink:0;width:30px;height:30px;border-radius:50%;background:color-mix(in oklab, var(--accent) 16%, var(--bg-elev));color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-family:'IBM Plex Mono',monospace">{{ st.n }}</div>
+          <div style="flex:1">
+            <h3 style="font-size:15px;font-weight:600;margin:4px 0 4px">{{ st.title }}</h3>
+            <p style="font-size:13px;color:var(--text-dim);margin:0 0 10px">{{ st.desc }}</p>
+            <div style="display:flex;align-items:center;gap:10px;background:#000;border:1px solid var(--border);border-radius:10px;padding:11px 14px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#cfe">
+              <span style="color:var(--text-faint)">$</span>
+              <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ st.cmd }}</span>
+              <button onClick="{{ st.onCopy }}" style="background:none;border:none;color:{{ st.copyColor }};cursor:pointer;font-size:12px;flex-shrink:0">{{ st.copyLabel }}</button>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="margin-top:30px;padding:16px 18px;background:var(--bg-elev);border:1px solid var(--border);border-radius:12px;font-size:13px;color:var(--text-dim)">
+      <strong style="color:var(--text)">marketplace update vs plugin update.</strong> Перше оновлює список джерел (звідки брати плагіни), друге — код конкретного встановленого плагіна.
+    </div>
+  </main>
+  </sc-if>
+

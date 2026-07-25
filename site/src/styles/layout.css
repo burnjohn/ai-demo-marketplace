@@ -1,0 +1,42 @@
+/*
+ * Page container. The design mockup gives every view its own <main> with an
+ * explicit max-width and padding (design-ref/*.html) -- widths differ per view
+ * on purpose: wide for the search grid, narrow for reading views.
+ *
+ * Values are taken verbatim from the mockup's inline `<main style=...>`.
+ * Do not add a width here in a view stylesheet -- add a modifier below so all
+ * page widths stay visible in one place.
+ */
+
+.page {
+  --page-width: 1080px;
+  max-width: var(--page-width);
+  margin-inline: auto;
+  padding: 26px 22px 80px;
+}
+
+/* Home is the only view with the taller top padding (56px in the mockup). */
+.page--home {
+  --page-width: 1080px;
+  padding-top: 56px;
+}
+
+.page--search {
+  --page-width: 1180px;
+}
+
+.page--plugin {
+  --page-width: 900px;
+}
+
+.page--artifact {
+  --page-width: 820px;
+}
+
+.page--whats-new {
+  --page-width: 760px;
+}
+
+.page--getting-started {
+  --page-width: 720px;
+}

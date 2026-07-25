@@ -1,0 +1,375 @@
+/*
+ * Styles for the search/browse view.
+ *
+ * Structural layout follows `design-ref/03-search.html`: a two-column grid
+ * with a plain (un-bordered) sticky facet column on the left and a results
+ * column on the right. The left column groups Kind (list with coloured
+ * dots and right-aligned counts), Keywords (wrapping mono pills) and
+ * Author (list with right-aligned counts).
+ *
+ * Responsive contract (verified by `src/__tests__/responsive.test.tsx`):
+ * mobile-first single column with no horizontal scroll at ≥ 320px.
+ * `.search-view__body` promotes to a `230px 1fr` grid only above a
+ * min-width media query. On narrow viewports the facet column collapses
+ * into the native `<details>` disclosure below; on wide viewports the
+ * `<summary>` is visually hidden and the sidebar is always expanded.
+ *
+ */
+
+.search-view {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.search-view__body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (min-width: 900px) {
+  .search-view__body {
+    grid-template-columns: 230px 1fr;
+    align-items: start;
+  }
+}
+
+/* ---------- Facet column -------------------------------------------------- */
+
+.search-view__aside {
+  min-width: 0;
+}
+
+@media (min-width: 900px) {
+  .search-view__aside {
+    position: sticky;
+    top: 82px;
+    align-self: start;
+  }
+}
+
+.search-view__facets {
+  width: 100%;
+  box-sizing: border-box;
+  /* Plain column — no border, no card background (matches design-ref/03-search.html). */
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.search-view__facets-summary {
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+  padding: 8px 0;
+  list-style: none;
+}
+
+.search-view__facets-summary::-webkit-details-marker {
+  display: none;
+}
+
+.search-view__facets-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+@media (min-width: 900px) {
+  /*
+   * On desktop the sidebar is always expanded — the mockup shows a plain
+   * column header (label + reset link) rather than a disclosure trigger.
+   */
+  .search-view__facets-summary {
+    display: none;
+  }
+}
+
+.search-view__facets-heading {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+}
+
+.search-view__facets-reset {
+  font-size: 11px;
+  color: var(--accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
+.search-view__facets-reset:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.search-view__facets-reset:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+.search-view__facet-group {
+  border: none;
+  padding: 0;
+  margin: 0 0 20px;
+  min-width: 0;
+}
+
+.search-view__facet-legend {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dim);
+  margin: 0 0 8px;
+  padding: 0;
+}
+
+.search-view__facet-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ---- Kind / Author rows: label on the left, count on the right --------- */
+
+.search-view__facet-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 8px;
+  border-radius: 7px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text);
+  text-align: left;
+  font: inherit;
+  font-size: 13px;
+  min-width: 0;
+}
+
+.search-view__facet-row:hover:not(:disabled) {
+  background: var(--bg-hover);
+}
+
+.search-view__facet-row:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/*
+ * Active row: a filled band that spans the full width of the row (the
+ * button already occupies the whole list column) so the selection is
+ * unmistakable — matches `design-ref/03-search.html`.
+ */
+.search-view__facet-row[aria-pressed="true"] {
+  background: color-mix(in oklab, var(--accent) 18%, transparent);
+  color: var(--accent);
+}
+
+.search-view__facet-row[aria-pressed="true"] .search-view__facet-count {
+  color: inherit;
+  opacity: 0.85;
+}
+
+.search-view__facet-row .search-view__facet-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.search-view__facet-row--kind .search-view__facet-label {
+  text-transform: capitalize;
+}
+
+.search-view__facet-count {
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+  color: var(--text-faint);
+  flex-shrink: 0;
+}
+
+.search-view__kind-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--text-faint);
+}
+
+.search-view__facet-row[data-kind="plugin"] .search-view__kind-dot {
+  background: var(--kind-plugin);
+}
+.search-view__facet-row[data-kind="skill"] .search-view__kind-dot {
+  background: var(--kind-skill);
+}
+.search-view__facet-row[data-kind="agent"] .search-view__kind-dot {
+  background: var(--kind-agent);
+}
+.search-view__facet-row[data-kind="command"] .search-view__kind-dot {
+  background: var(--kind-command);
+}
+.search-view__facet-row[data-kind="hook"] .search-view__kind-dot {
+  background: var(--kind-hook);
+}
+.search-view__facet-row[data-kind="mcp"] .search-view__kind-dot {
+  background: var(--kind-mcp);
+}
+
+/* ---- Keyword pills ----------------------------------------------------- */
+
+.search-view__facet-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.search-view__facet-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+
+.search-view__facet-pill:hover:not(:disabled) {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+.search-view__facet-pill:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.search-view__facet-pill[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 16%, transparent);
+  color: var(--accent);
+}
+
+/*
+ * Keyword pills carry no count — the mockup shows them as plain mono pills.
+ * Counts stay on the kind and author rows, where they help scan the sidebar.
+ */
+
+/* ---------- Results column ---------------------------------------------- */
+
+/*
+ * The results column. Must NOT reuse `.search-view__body` -- that class is the
+ * outer two-column grid, and applying it here nested a second `240px 1fr` grid
+ * inside the results column, which crammed the header into a 240px track and
+ * pushed the card grid out of alignment.
+ */
+.search-view__results {
+  min-width: 0;
+}
+
+.search-view__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+  min-width: 0;
+}
+
+.search-view__heading-group {
+  min-width: 0;
+}
+
+.search-view__heading {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 3px;
+  letter-spacing: -0.01em;
+}
+
+.search-view__count {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin: 0;
+}
+
+.search-view__sort {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.search-view__sort-text {
+  white-space: nowrap;
+}
+
+.search-view__sort-select {
+  height: 32px;
+  padding: 0 8px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  outline: none;
+  font: inherit;
+}
+
+.search-view__sort-select:focus-visible {
+  border-color: var(--accent);
+}
+
+.search-view__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (min-width: 640px) {
+  .search-view__grid {
+    /*
+     * Matches design-ref/03-search.html: auto-fill tracks whose minimum is
+     * 320px yields two columns inside the 1180px page container, and
+     * collapses to one column below that.
+     */
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+}
+
+.search-view__empty {
+  border: 1px dashed var(--border-strong);
+  border-radius: 14px;
+  padding: 70px 20px;
+  text-align: center;
+}
+
+.search-view__visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}

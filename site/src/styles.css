@@ -1,41 +1,6 @@
-:root {
-  color-scheme: light dark;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-}
-
-.wrap {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  padding: 2rem;
-  text-align: center;
-}
-
-.wrap h1 {
-  margin: 0;
-  font-size: clamp(1.75rem, 4vw, 2.75rem);
-}
-
-.hello {
-  margin: 0;
-  font-size: 1.25rem;
-  opacity: 0.9;
-}
-
-.note {
-  margin: 0;
-  max-width: 32rem;
-  opacity: 0.65;
-  line-height: 1.5;
-}
+/*
+ * Entry point kept at this path so `site/src/main.tsx` (owned by another
+ * task) does not need to change its import path. Superseded by the layer
+ * under `src/styles/`.
+ */
+@import "./styles/index.css";

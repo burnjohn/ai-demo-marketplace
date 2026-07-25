@@ -87,6 +87,18 @@ analysing — do not silently pick.
      `max_depth=`). For a cost estimate pass `--prices prices.json`; **do not hard-code prices —
      confirm current per-model rates via the `claude-api` skill first**, since they drift.
 
+   **Every cost number in your report must come out of this script.** Run it *once*, with
+   `--prices`, and copy the `cost` column and `TOTAL` verbatim. Never compute a per-agent cost
+   yourself, and never fill in a cost column the script printed as `n/a` — the estimate you would
+   reach for in your head omits **cache-write**, which is routinely ~40% of real spend, so a
+   hand-filled column will not reconcile with any total you also report. If you have no verified
+   prices, report cost as `n/a` for every row and say so; that is a valid retro.
+
+   The script also prints a **`cost split:`** line (cache-read / cache-write / output / input).
+   Read it *before* writing recommendations: when `cache_write` outweighs `out`, the lever is
+   **fewer, longer-lived agents** (a resumed agent reuses its cached prefix; a fresh spawn pays the
+   write premium again) — not trimming duplicated file reads, which are usually pennies.
+
    Find the project slug / session id from the symlink targets under the session's `tasks/`
    directory, or by matching the most recently modified `*.jsonl` under
    `~/.claude/projects/<project-slug>/`.
@@ -103,7 +115,10 @@ Collect what you can; mark anything unavailable as `n/a` rather than guessing.
 - Wall-clock per agent and total; **parallelism factor** = Σ(agent spans) ÷ wall-clock.
 - **Critical path** — the single agent that dominated wall-clock.
 - Cost ($) per agent and total (only with verified prices), plus **cost per useful output**
-  ($/finding, $/spec, $/fixed-task) — a better signal than raw spend.
+  ($/finding, $/spec, $/fixed-task) — a better signal than raw spend. Show the arithmetic for each
+  derived ratio (`$73.75 / 116 = $0.64`) so a wrong one is visible rather than plausible.
+- **Cost composition** — the cache-read / cache-write / output split from the script's `cost split:`
+  line. This is what tells you *which* optimisation is worth recommending; totals alone don't.
 
 **Process & effectiveness**
 - Agent count **including nested sub-agents** (report depth-1 vs nested separately, e.g.
@@ -134,11 +149,15 @@ Collect what you can; mark anything unavailable as `n/a` rather than guessing.
    from the *qualitative* ones (from the reports and your own observation of the run).
 4. **Recommend.** Turn each finding into a concrete, owned action (see *Recommendations*). No vague
    "could be better" — name the agent, the file, or the parameter, and the expected effect.
-5. **Output** the report (below) to chat. Unless `no-ledger`, append one trend row to
+5. **Draft** the report (format below).
+6. **Self-check the draft** against *Self-check* below — every box, before anything leaves your
+   context. A retro's whole value is that its numbers can be trusted; an unchecked one is worse
+   than none, because it gets pasted into a ledger and compared against future runs.
+7. **Output** the report to chat. Unless `no-ledger`, append one trend row to
    `docs/retros/ledger.md` (create the file with a header if missing). Writing that ledger row —
    and an optional full per-run file under `docs/retros/` — is the **only** file write this skill
    makes.
-6. **Offer**, but do not perform, the follow-up: "want me to apply recommendation X?" Applying it
+8. **Offer**, but do not perform, the follow-up: "want me to apply recommendation X?" Applying it
    (editing an agent prompt, a skill, the orchestration) is a separate, explicitly-approved step.
 
 ## Recommendations — make them actionable
@@ -185,6 +204,37 @@ Each recommendation names a target, a change, and the expected payoff. Examples 
 ### Ledger
 Appended to `docs/retros/ledger.md` (row: <date> · <label> · agents · tokens · cost · parallelism).
 ```
+
+## Self-check (run before you return the report)
+
+Do not return a retro until every box holds. These are arithmetic and provenance checks, not style
+checks — each one exists because it has actually failed in a real run.
+
+- [ ] **Every column in the metrics table came from the script's output**, not from your own
+      arithmetic. If you typed a number the script didn't print, delete it or re-run with the flag
+      that produces it.
+- [ ] **The cost column sums to the stated total.** Add it up. This is the single highest-value
+      check in the skill: a table whose rows are individually plausible but sum to two-thirds of the
+      total is the exact failure mode this catches. Cheapest way to be sure:
+      `… --json | python3 -c "import json,sys; d=json.load(sys.stdin); s=sum(a['cost_usd'] or 0 for a in d['agents']); print(s, d['summary']['cost_usd'])"`
+- [ ] **Every derived ratio recomputes.** Divide it again: cost-per-AC, cost-per-task, waste
+      percentage, parallelism. Show the division in the report so a reader can check it too.
+- [ ] **Agent count matches the journals**, and nested agents are counted in the totals. If your
+      in-context recollection says N and the journals say more, the journals are right — say so
+      explicitly in the report rather than silently using one number.
+- [ ] **Any figure you could not derive is labelled `n/a`**, not filled with a best guess. Marking a
+      gap costs the reader nothing; a fabricated number costs them the whole report's credibility.
+- [ ] **Each recommendation points at the largest real line item.** Cross-check against the
+      `cost split:` output — a recommendation to trim a few thousand duplicated read tokens is noise
+      next to millions of cache-write tokens. Attach the rough saving to each one, and if you can't
+      estimate it, say the recommendation is qualitative.
+- [ ] **Estimated numbers are labelled estimates.** Cost from a published price map is not billing
+      data; say so once, and name any attribution you're unsure of (e.g. a nested agent's model).
+- [ ] **The ledger row's figures match the report's.** They are copies; they diverge the moment you
+      edit one and not the other.
+
+If a check fails, fix the report before returning it — and if the cause was the script rather than
+the draft, say that too, so the tooling gets fixed instead of the symptom.
 
 ### Ledger row format (`docs/retros/ledger.md`)
 

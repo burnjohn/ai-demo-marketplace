@@ -1,0 +1,456 @@
+/*
+ * Plugin detail view — visual language taken from design-ref/04-plugin.html.
+ * All colours resolve to tokens from src/styles/tokens.css. Page width is set
+ * by src/styles/layout.css (.page--plugin → 900px); no width is declared here.
+ */
+
+.plugin-view {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  color: var(--text);
+}
+
+/* --- Back control ----------------------------------------------------- */
+
+.plugin-view__back {
+  align-self: flex-start;
+  padding: 0;
+  margin: 0 0 20px;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.plugin-view__back:hover,
+.plugin-view__back:focus-visible {
+  color: var(--text);
+  text-decoration: none;
+}
+
+/* --- Header ---------------------------------------------------------- */
+
+.plugin-view__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin: 0;
+}
+
+.plugin-view__avatar {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 13px;
+  background: color-mix(in oklab, var(--kind-plugin) 16%, var(--bg-elev));
+  color: var(--kind-plugin);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.plugin-view__header-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.plugin-view__title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.plugin-view__title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+/* Version pill — the mockup swaps VersionBadge's default (plain mono faint
+   text) for a tinted mono pill in the plugin header context. Scoped to this
+   view only. */
+.plugin-view__version {
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  color: var(--kind-plugin);
+  background: color-mix(in oklab, var(--kind-plugin) 15%, transparent);
+}
+
+.plugin-view__compatibility {
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  color: var(--kind-skill);
+  background: color-mix(in oklab, var(--kind-skill) 14%, transparent);
+}
+
+.plugin-view__compatibility::before {
+  content: "✓ ";
+}
+
+.plugin-view__description {
+  margin: 0;
+  max-width: 600px;
+  color: var(--text-dim);
+}
+
+.plugin-view__meta {
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+/* --- Install row ----------------------------------------------------- */
+
+.plugin-view__install {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  margin: 0;
+}
+
+/*
+ * The consumed CopyControl (owned by src/ui/copy) renders as
+ *   .copy-control > .copy-control__text + .copy-control__button
+ *
+ * In the mockup this row is a dark bordered command field with a leading
+ * "$" prompt plus a filled accent Copy button. We restyle the CopyControl's
+ * two children in this view's context only. If CopyControl's internal DOM
+ * ever changes, these overrides must be revisited.
+ */
+.plugin-view__install-copy {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.plugin-view__install-copy .copy-control__text {
+  flex: 1;
+  min-width: 0;
+  padding: 0 14px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #000;
+  color: #cfe;
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.plugin-view__install-copy .copy-control__text::before {
+  content: "$";
+  margin-right: 10px;
+  color: var(--text-faint);
+}
+
+.plugin-view__install-copy .copy-control__button {
+  flex: 0 0 auto;
+  height: 44px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.plugin-view__install-copy .copy-control__button:hover,
+.plugin-view__install-copy .copy-control__button:focus-visible {
+  border-color: transparent;
+}
+
+.plugin-view__source-link {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 16px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.plugin-view__source-link:hover,
+.plugin-view__source-link:focus-visible {
+  border-color: var(--border-strong);
+  text-decoration: none;
+}
+
+/* --- Section headings ------------------------------------------------- */
+
+.plugin-view__section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+}
+
+.plugin-view__section-heading {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* --- Plugin contents / artifact groups -------------------------------- */
+
+.plugin-view__groups {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.plugin-view__artifact-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.plugin-view__group-heading {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+}
+
+.plugin-view__kind-dot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.plugin-view__kind-dot[data-kind="skill"]   { background: var(--kind-skill); }
+.plugin-view__kind-dot[data-kind="agent"]   { background: var(--kind-agent); }
+.plugin-view__kind-dot[data-kind="command"] { background: var(--kind-command); }
+.plugin-view__kind-dot[data-kind="hook"]    { background: var(--kind-hook); }
+.plugin-view__kind-dot[data-kind="mcp"]     { background: var(--kind-mcp); }
+
+.plugin-view__kind-label {
+  font-family: inherit;
+}
+
+.plugin-view__kind-count {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-faint);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.plugin-view__artifact-list {
+  display: grid;
+  /* `min(240px, 100%)` on the minimum side of each track: 240px on wide
+     containers gives the mockup's wrapping grid, but drops to the
+     container's own width on narrow viewports so a single track cannot
+     force the row wider than its parent (which is what pushed the whole
+     grid off the right edge before). */
+  grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr));
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.plugin-view__artifact-item {
+  display: flex;
+  /* Grid items default to `min-width: auto` (their intrinsic min-content).
+     The nowrap description below reports its full width as min-content, so
+     without this override the grid track expands past its 1fr share and the
+     row overflows the page container. */
+  min-width: 0;
+}
+
+.plugin-view__artifact-link {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 11px 13px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  text-decoration: none;
+  text-align: left;
+}
+
+.plugin-view__artifact-link:hover,
+.plugin-view__artifact-link:focus-visible {
+  border-color: var(--border-strong);
+  text-decoration: none;
+}
+
+.plugin-view__artifact-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.plugin-view__artifact-name {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.plugin-view__artifact-invocation {
+  flex-shrink: 0;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: var(--accent);
+}
+
+.plugin-view__artifact-description {
+  font-size: 12px;
+  color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- Dependencies ---------------------------------------------------- */
+
+.plugin-view__dep-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.plugin-view__dep-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.plugin-view__dep-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.plugin-view__dep-chip:hover,
+.plugin-view__dep-chip:focus-visible {
+  border-color: var(--border-strong);
+  text-decoration: none;
+}
+
+.plugin-view__dependency-range {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.plugin-view__dependency-external {
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+/* --- README + Changelog prose cards ---------------------------------- */
+
+.plugin-view__prose-card {
+  padding: 22px 24px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  color: var(--text-dim);
+  line-height: 1.65;
+}
+
+.plugin-view__prose-placeholder {
+  margin: 0;
+  color: var(--text-dim);
+}
+
+.plugin-view__changelog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.plugin-view__changelog-entry {
+  padding: 13px 16px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.plugin-view__changelog-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Accent-tint the version badge in the changelog context; VersionBadge's
+   default styling is plain faint mono text (see components.css). */
+.plugin-view__changelog-version {
+  color: var(--kind-plugin);
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.plugin-view__changelog-date {
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+.plugin-view__changelog-summary {
+  margin-top: 5px;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+/* --- Not-found ------------------------------------------------------- */
+
+.plugin-view__not-found {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

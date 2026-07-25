@@ -1,0 +1,89 @@
+  <!-- ============ PLUGIN DETAIL ============ -->
+  <sc-if value="{{ isPlugin }}" hint-placeholder-val="{{ false }}">
+  <main style="max-width:900px;margin:0 auto;padding:26px 22px 80px">
+    <button onClick="{{ backToSearch }}" style="background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:13px;padding:0;margin-bottom:20px">← Назад</button>
+    <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:8px">
+      <div style="width:52px;height:52px;border-radius:13px;background:color-mix(in oklab, var(--kind-plugin) 16%, var(--bg-elev));display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">◆</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <h1 style="font-size:26px;font-weight:700;margin:0;letter-spacing:-.02em">{{ plugin.displayName }}</h1>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding:2px 8px;border-radius:6px;color:var(--kind-plugin);background:color-mix(in oklab, var(--kind-plugin) 15%, transparent)">v{{ plugin.version }}</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding:2px 8px;border-radius:6px;color:var(--kind-skill);background:color-mix(in oklab, var(--kind-skill) 14%, transparent)">✓ {{ plugin.compatibility }}</span>
+        </div>
+        <p style="color:var(--text-dim);margin:8px 0 0;max-width:600px">{{ plugin.description }}</p>
+        <div style="font-size:12px;color:var(--text-faint);margin-top:8px;font-family:'IBM Plex Mono',monospace">{{ plugin.author }} · оновлено {{ plugin.updated }}</div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:stretch;gap:10px;margin:22px 0 30px">
+      <div style="flex:1;display:flex;align-items:center;gap:10px;background:#000;border:1px solid var(--border);border-radius:10px;padding:0 14px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#cfe">
+        <span style="color:var(--text-faint)">$</span>
+        <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ plugin.installText }}</span>
+      </div>
+      <button onClick="{{ plugin.onCopy }}" style="height:44px;padding:0 18px;background:var(--accent);border:none;border-radius:10px;color:var(--accent-fg);font-weight:600;cursor:pointer">{{ plugin.copyLabel }}</button>
+      <a href="{{ plugin.githubUrl }}" target="_blank" style="height:44px;padding:0 16px;display:inline-flex;align-items:center;background:var(--bg-elev);border:1px solid var(--border);border-radius:10px;color:var(--text);font-weight:500">View on GitHub ↗</a>
+    </div>
+
+    <section style="margin-bottom:30px">
+      <h2 style="font-size:15px;font-weight:600;margin:0 0 12px">Склад плагіна</h2>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <sc-for list="{{ comps }}" as="g" hint-placeholder-count="3">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="width:8px;height:8px;border-radius:50%;background:var(--kind-{{ g.kind }})"></span>
+              <span style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--text-dim)">{{ g.label }}</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-faint)">{{ g.count }}</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px">
+              <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="2">
+                <button onClick="{{ it.onOpen }}" style="text-align:left;background:var(--bg-elev);border:1px solid var(--border);border-radius:10px;padding:11px 13px;cursor:pointer;color:var(--text)" style-hover="border-color:var(--border-strong)">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                    <span style="font-weight:600;font-size:13px">{{ it.displayName }}</span>
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent)">{{ it.invocation }}</span>
+                  </div>
+                  <div style="font-size:12px;color:var(--text-dim);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ it.description }}</div>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <sc-if value="{{ plugin.hasDeps }}" hint-placeholder-val="{{ false }}">
+    <section style="margin-bottom:30px">
+      <h2 style="font-size:15px;font-weight:600;margin:0 0 12px">Залежності</h2>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <sc-for list="{{ plugin.deps }}" as="d" hint-placeholder-count="1">
+          <button onClick="{{ d.onOpen }}" style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding:6px 12px;background:var(--bg-elev);border:1px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer" style-hover="border-color:var(--border-strong)">{{ d.label }} ↗</button>
+        </sc-for>
+      </div>
+    </section>
+    </sc-if>
+
+    <section style="margin-bottom:30px">
+      <h2 style="font-size:15px;font-weight:600;margin:0 0 12px">README</h2>
+      <div style="background:var(--bg-elev);border:1px solid var(--border);border-radius:13px;padding:22px 24px">
+        <sc-for list="{{ plugin.readme }}" as="p" hint-placeholder-count="3">
+          <p style="margin:0 0 12px;color:var(--text-dim);line-height:1.65">{{ p }}</p>
+        </sc-for>
+      </div>
+    </section>
+
+    <section>
+      <h2 style="font-size:15px;font-weight:600;margin:0 0 12px">Changelog</h2>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <sc-for list="{{ plugin.changelog }}" as="c" hint-placeholder-count="2">
+          <div style="background:var(--bg-elev);border:1px solid var(--border);border-radius:10px;padding:13px 16px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--kind-plugin)">v{{ c.version }}</span>
+              <span style="font-size:12px;color:var(--text-faint)">{{ c.date }}</span>
+            </div>
+            <div style="font-size:13px;color:var(--text-dim);margin-top:5px">{{ c.summary }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </main>
+  </sc-if>
+

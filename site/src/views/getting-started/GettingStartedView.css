@@ -1,0 +1,171 @@
+/*
+ * Getting started — narrow reading column of numbered steps
+ * (design-ref/07-getting-started.html). Uses design tokens only. Page width
+ * and padding come from `layout.css` (`.page--getting-started`) — not
+ * redeclared here.
+ */
+
+.getting-started-view {
+  display: flex;
+  flex-direction: column;
+}
+
+.getting-started-view__back {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 18px;
+  color: var(--text-dim);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.getting-started-view__back:hover,
+.getting-started-view__back:focus-visible {
+  color: var(--text);
+}
+
+.getting-started-view__heading {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.getting-started-view__intro {
+  margin: 0 0 32px;
+  max-width: 560px;
+  color: var(--text-dim);
+}
+
+.getting-started__steps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.getting-started__step {
+  display: flex;
+  gap: 16px;
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.getting-started__step-number {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: color-mix(in oklab, var(--accent) 16%, var(--bg-elev));
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+.getting-started__step-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.getting-started__step-title {
+  margin: 4px 0 4px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.getting-started__step-explanation {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+/*
+ * Terminal-style command block. The CopyControl is rendered inside, and its
+ * default outlined pill is neutralised via descendant selectors so the whole
+ * row reads as one flat command bar per the mockup.
+ */
+.getting-started__command {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.getting-started__prompt {
+  flex-shrink: 0;
+  color: var(--text-faint);
+}
+
+.getting-started__command .copy-control {
+  flex: 1;
+  min-width: 0;
+  gap: 10px;
+}
+
+.getting-started__command .copy-control__text {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.getting-started__command .copy-control__button {
+  flex-shrink: 0;
+  height: auto;
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.getting-started__command .copy-control__button:hover,
+.getting-started__command .copy-control__button:focus-visible {
+  color: var(--text);
+}
+
+.getting-started__command .copy-control__button[data-status="success"] {
+  color: var(--kind-skill);
+  background: none;
+  border: none;
+}
+
+.getting-started__update-note {
+  margin-top: 30px;
+  padding: 16px 18px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.getting-started__update-note strong {
+  color: var(--text);
+  font-weight: 600;
+}

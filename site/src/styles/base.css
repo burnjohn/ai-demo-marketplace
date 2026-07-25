@@ -1,0 +1,59 @@
+/* Base typography and app-level defaults. Relies on tokens.css for colours. */
+
+body {
+  font-family: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+code,
+kbd,
+pre,
+samp {
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+.app {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/*
+ * Default link colour, deliberately written as `:where(.app) a` so it weighs
+ * only as much as a bare element selector. Written as `.app a` it outranked
+ * every single-class component rule, which silently repainted links that had
+ * already chosen their own colour -- an accent-filled button ended up with an
+ * accent-coloured label on an accent background, and muted links came out
+ * blue. Any component rule now overrides this without needing to escalate.
+ */
+:where(.app) a {
+  color: var(--accent);
+}
+
+.app ::selection {
+  background: color-mix(in oklab, var(--accent) 40%, transparent);
+}
+
+/*
+ * Focus ring -- an outline rather than a box-shadow so it always renders on
+ * top of adjacent content and clears the element's own border, which keeps it
+ * legible against whatever surface sits behind it.
+ */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/*
+ * Elements with tabindex="-1" cannot be reached with the keyboard; they only
+ * ever receive focus programmatically, as the route change does when it moves
+ * focus to the new view's heading so screen readers announce it. Drawing a ring
+ * there just puts a stray box around the heading after every navigation, so
+ * suppress it. Keyboard-reachable controls are unaffected.
+ */
+[tabindex="-1"]:focus,
+[tabindex="-1"]:focus-visible {
+  outline: none;
+}
